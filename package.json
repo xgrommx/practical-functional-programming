@@ -1,0 +1,23 @@
+{
+  "name": "practical-functional-programming",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xgrommx/practical-functional-programming.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xgrommx/practical-functional-programming/issues"
+  },
+  "homepage": "https://github.com/xgrommx/practical-functional-programming#readme",
+  "dependencies": {
+    "union-type": "^0.3.3"
+  }
+}
