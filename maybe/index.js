@@ -1,5 +1,6 @@
 const Type = require('union-type');
 const {K, B, I} = require('../combinators');
+const {map} = require('..');
 
 // data Maybe a = Nothing | Just a
 const Maybe = Type({
@@ -26,7 +27,7 @@ Object.assign(Maybe.prototype, {
     // Foldable
     foldl(f, z) { return this.maybe(z, x => f(z, x)) },
     // Traversable
-    traverse(T, f) { return this.maybe(T.of(Nothing()), B(map(v => Maybe.of(v)))(f)) },
+    traverse(of, f) { return this.maybe(of(Nothing()), B(map(v => Maybe.of(v)))(f)) },
     // Monoid
     concat(m) { return this.isNothing() ? m : m.isNothing() ? this : this.fromJust().concat(m.fromJust()) },
     fromJust() { return this.case({Just: I}) },

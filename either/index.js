@@ -25,9 +25,9 @@ Object.assign(Either.prototype, {
     // Foldable
     foldl(f, z) { return this.either(K(z), y => f(z, y)) },
     // Foldable
-    foldMap(T, f) { return this.either(K(T.empty()), f) },
+    foldMap(empty, f) { return this.either(K(empty()), f) },
     // Traversable
-    traverse(T, f) { return this.either(x => T.of(Left(x)), B(map(Right))(f)) },
+    traverse(of, f) { return this.either(x => of(Left(x)), B(map(Right))(f)) },
     fromLeft() { return this.case({Left: I}) },
     fromRight() { return this.case({Right: I}) },
     isLeft() { return this.either(K(true), K(false)) },

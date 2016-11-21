@@ -21,9 +21,9 @@ Object.assign(_Compose.prototype, {
     // Applicative
     ap(m) { return Compose(liftA2(ap)(this.getCompose())(m.getCompose())) },
     // Traversable
-    traverse(T, f) { return map(x => Compose(x))(traverse(T, traverse(T, f))(this.getCompose())) },
+    traverse(of, f) { return map(x => Compose(x))(traverse(of, traverse(of, f))(this.getCompose())) },
     // Foldable
-    foldMap(T, f) { return foldMap(T, foldMap(T, f))(this.getCompose()) },
+    foldMap(empty, f) { return foldMap(empty, foldMap(empty, f))(this.getCompose()) },
     getCompose() { return this.case({Compose: I}) }
 });
 

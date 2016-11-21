@@ -21,7 +21,7 @@ Object.assign(Array.prototype, {
         return this.reduce((acc, next) => f(acc, next), z);
     },
     // Traversable
-    traverse(T, f) {
-        return this.foldr((x, ys) => liftA2(a => b => [a, ...b])(f(x))(ys), T.of([]))
+    traverse(of, f) {
+        return this.foldr((x, ys) => liftA2(a => b => [a, ...b])(f(x))(ys), of([]))
     }
 });
