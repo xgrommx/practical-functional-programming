@@ -1,5 +1,7 @@
+require('./array');
 const Type = require('union-type');
-const {liftA2} = require('.');
+const {liftA2, map, traverse} = require('.');
+const {B, I} = require('./combinators');
 
 const isIterable = obj => obj != null && typeof obj[Symbol.iterator] === 'function';
 
@@ -59,4 +61,10 @@ console.log(
 
 console.log(
   liftA2(x => y => x * y)(ZipList.of(10))(ZipList([1,2,3])).getZipList()
+);
+
+const transpose = xss => traverse(ZipList.of, ZipList)(xss).getZipList();
+
+console.log(
+  transpose([[1,2,3,4],[5,6,7,8],[9,10,11,12]])
 );
