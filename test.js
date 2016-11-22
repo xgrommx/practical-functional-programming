@@ -11,7 +11,8 @@ const {foldMap, replicateM, mapLeft, mapRight, traverse, liftA2} = require('.');
 console.log(
     // foldMap(Array, Array.of)(Compose([Just(10), Just(20), Nothing()])),
     // replicateM(Array, 2)([1, 2, 3]),
-    mapRight([1,2,3])([4])
+    mapRight([1,2,3])([4]),
+    mapLeft([1,2,3])([4])
 );
 
 const Type = require('union-type');
