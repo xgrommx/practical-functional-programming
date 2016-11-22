@@ -47,6 +47,11 @@ Object.assign(_ZipList.prototype, {
 });
 
 const zipWith = f => xs => ys => ZipList.of(f).ap(ZipList(xs)).ap(ZipList(ys)).getZipList();
+const zipWith3 = f => xs => ys => zs => ZipList.of(f).ap(ZipList(xs)).ap(ZipList(ys)).ap(ZipList(zs)).getZipList();
+
+console.log(
+  zipWith3(x => y => z => [x, y ,z])([1,2,3])([4,5,6])([7,8])
+);
 
 console.log(
   zipWith(x => y => [x, y])([1,2,3])([4,5,6])
