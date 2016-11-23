@@ -5,11 +5,20 @@ const {I, K, B} = require('../combinators');
 const {zipWith, tail, zip} = require('ramda');
 const {foldMap} = require('..');
 
+// Functor
+// Applicative
+// Monad
+// Monoid
+// Foldable
+// Traversable
+// Alternative
+// MonadPlus
+
 // Monoids
 
-// Any => Monoid
-// All => Monoid
-// Array
+// Any => Monoid !
+// All => Monoid !
+// Array ?
 // Maybe => Monoid, Monad, Applicative, Functor, Foldable, Traversable, Alternative
 // IO => Monoid, Monad, Functor, Applicative
 // Last => Monoid
