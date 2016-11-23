@@ -1,6 +1,6 @@
 require('./array');
 const Type = require('union-type');
-const {liftA2, map, traverse} = require('.');
+const {liftA2, map, traverse, foldMap} = require('.');
 const {B, I} = require('./combinators');
 
 const isIterable = obj => obj != null && typeof obj[Symbol.iterator] === 'function';
@@ -43,6 +43,12 @@ Object.assign(_ZipList.prototype, {
             }
         })
     },
+    foldMap(empty, f) {
+      return foldMap(empty, f)(this.getZipList());
+    },
+    traverse(of, f) {
+      return this.getZipList().traverse(of, f).map(ZipList);
+    },
     getZipList() {
         return [...this];
     }
@@ -68,3 +74,7 @@ const transpose = xss => traverse(ZipList.of, ZipList)(xss).getZipList();
 console.log(
   transpose([[1,2,3,4],[5,6,7,8],[9,10,11,12]])
 );
+
+console.log(
+  foldMap(Array.empty, Array.of)(ZipList([1,2,3]))
+)

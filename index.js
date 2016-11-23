@@ -50,8 +50,8 @@ const foldr = f => z => xs => xs.foldr(f, z);
 // foldl
 const foldl = f => z => xs => xs.foldl(f, z);
 // foldMap
-const foldMap = (empty, f = false) => xs => {
-    if(xs.foldMap) return xs.foldMap(T, f || T);
+const foldMap = (empty, f) => xs => {
+    if(xs.foldMap) return xs.foldMap(empty, f);
     if(xs.foldr) return foldr((x, acc) => f(x).concat(acc))(empty())(xs);
 };
 // fold
