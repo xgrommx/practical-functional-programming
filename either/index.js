@@ -72,12 +72,14 @@ Object.assign(Either.prototype, {
   }
 });
 
-Either.try(x => {
-  if (x === 2) {
-    throw new Error('This is 2');
-  } else {
-    return x * x;
-  }
-})(2).either(x => console.log(`Error => ${x.message}`), x => console.log(x));
+const either = f => g => e => e.either(f, g);
 
-module.exports = { Either, Left, Right };
+// Either.try(x => {
+//   if (x === 2) {
+//     throw new Error('This is 2');
+//   } else {
+//     return x * x;
+//   }
+// })(2).either(x => console.log(`Error => ${x.message}`), x => console.log(x));
+
+module.exports = { Either, Left, Right, either };
