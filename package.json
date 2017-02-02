@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/xgrommx/practical-functional-programming#readme",
   "dependencies": {
+    "rx": "^4.1.0",
     "union-type": "^0.3.3"
   }
 }

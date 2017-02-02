@@ -34,7 +34,14 @@ Object.assign(Maybe.prototype, {
     isJust() { return this.maybe(false, K(true)) },
     isNothing() { return !this.isJust() },
     getOrElse(d) { return this.maybe(d, I) },
-    maybe(d, f) { return this.case({Just: v => f(v), Nothing: _ => d}) }
+    maybe(d, f) { return this.case({Just: v => f(v), Nothing: _ => d}) },
+    valueOf() { return this.fromJust() },
+    toString() {
+      return this.case({
+        Nothing: _ => `Nothing`,
+        Just: v => `Just ${v}`
+      })
+    }
 });
 
 module.exports = { Maybe, Just, Nothing };

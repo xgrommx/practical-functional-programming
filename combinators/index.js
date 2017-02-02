@@ -4,6 +4,8 @@ const K = x => y => x;
 const S = x => y => z => x(z)(y(z));
 // I :: a -> a
 const I = S(K)(K);
+// I_ :: (a -> b) -> a -> b
+const I_ = S(S(K));
 // B :: (b -> c) -> (a -> b) -> a -> c
 const B = S(K(S))(K);
 // C :: (a -> b -> c) -> b -> a -> c
@@ -15,6 +17,4 @@ const W__ = B(B(W));
 // Q :: (a -> b) -> (b -> c) -> a -> c
 const Q = C(B);
 
-module.exports = {
-    S, K, I, B, C, W, W__, Q
-};
+module.exports = { S, K, I, B, C, W, W__, Q };

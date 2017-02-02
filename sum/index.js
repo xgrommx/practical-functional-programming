@@ -18,3 +18,7 @@ Object.assign(_Sum.prototype, {
         return this.case({Sum: I});
     }
 });
+
+module.exports = {
+  Sum
+}

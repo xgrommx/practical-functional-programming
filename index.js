@@ -76,7 +76,7 @@ const sequence_ = (of, f) => foldr((x, acc) => x.then(acc))(of(void 0));
 const traverse = (of, f) => xs => xs.traverse(of, f);
 const sequence = (of, xs) => {
     if(xs.sequence) return xs.sequence(of);
-    if(xs.traverse) return xs.traverse(of, I);
+if(xs.traverse) return xs.traverse(of, I);
 };
 const mapM = traverse;
 const _for = xs => (of, f) => traverse(of, f);

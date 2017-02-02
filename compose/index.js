@@ -1,5 +1,5 @@
 const Type = require('union-type');
-const {K, I} = require('../combinators');
+const {K, I, B} = require('../combinators');
 const {liftA2, map, ap, foldMap, traverse} = require('../');
 
 const _Compose = Type({
@@ -28,3 +28,14 @@ Object.assign(_Compose.prototype, {
 });
 
 module.exports = { Compose };
+
+require('../functions');
+
+const take = n => xs => xs.slice(0, n);
+const drop = n => xs => xs.slice(n);
+
+const rotate = liftA2(a => b => a.concat(b))(Compose(drop))(Compose(take)).getCompose();
+
+console.log(
+  rotate(3)([1,2,3,4,5,6,7,8,9,10])
+);

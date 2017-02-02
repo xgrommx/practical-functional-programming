@@ -57,6 +57,8 @@ Object.assign(_ZipList.prototype, {
 const zipWith = f => xs => ys => ZipList.of(f).ap(ZipList(xs)).ap(ZipList(ys)).getZipList();
 const zipWith3 = f => xs => ys => zs => ZipList.of(f).ap(ZipList(xs)).ap(ZipList(ys)).ap(ZipList(zs)).getZipList();
 
+zipWith3(x => y => z => [x, y ,z])([1,2,3])([4,5,6])([7,8]) //> 1,4,7,2,5,8
+
 console.log(
   zipWith3(x => y => z => [x, y ,z])([1,2,3])([4,5,6])([7,8])
 );
@@ -71,6 +73,9 @@ console.log(
 
 const transpose = xss => traverse(ZipList.of, ZipList)(xss).getZipList();
 
+transpose([[1,2,3,4],[5,6,7,8],[9,10,11,12]]) //> 1,5,9,2,6,10,3,7,11,4,8,12
+foldMap(Array.empty, Array.of)(ZipList([1,2,3])) //> 1,2,3
+
 console.log(
   transpose([[1,2,3,4],[5,6,7,8],[9,10,11,12]])
 );
@@ -78,3 +83,7 @@ console.log(
 console.log(
   foldMap(Array.empty, Array.of)(ZipList([1,2,3]))
 )
+
+module.exports = {
+  ZipList
+}

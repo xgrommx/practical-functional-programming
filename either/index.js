@@ -11,6 +11,14 @@ const {Left, Right} = Either;
 
 Either.of = Right;
 
+Either.try = f => (...args) => {
+  try {
+    return Right(f(...args))
+  } catch(e) {
+    return Left(e)
+  }
+}
+
 Object.assign(Either.prototype, {
     // Functor
     map(f) { return chain_(B(Right)(f))(this) },
@@ -32,7 +40,17 @@ Object.assign(Either.prototype, {
     fromRight() { return this.case({Right: I}) },
     isLeft() { return this.either(K(true), K(false)) },
     isRight() { return !this.isLeft() },
-    either(f, g) { return this.case({Left: _ => f(_), Right: _ => g(_)}) },
+    either(f, g) { return this.case({
+      Left: _ => f(_),
+      Right: _ => g(_)}) },
 });
+
+Either.try(x => {
+  if(x === 2) {
+    throw new Error('This is 2')
+  } else {
+    return x * x
+  }
+})(2).either(x => console.log(`Error => ${x.message}`), x => console.log(x))
 
 module.exports = { Either, Left, Right };
