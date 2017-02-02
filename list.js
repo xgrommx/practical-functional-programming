@@ -35,7 +35,7 @@ Object.assign(Array.prototype, {
     // } else {
     //   return Nil()
     // }
-  },
+  }
 });
 
 // build (\c n -> foldr (\x y -> foldr c y x) n xs)
@@ -58,7 +58,7 @@ Object.assign(List.prototype, {
       Nil: K(0),
       Cons(x, xs) {
         return 1 + xs.length();
-      },
+      }
     });
   },
   at(n) {
@@ -66,7 +66,7 @@ Object.assign(List.prototype, {
       Cons(x, xs) {
         if (n === 0) return x;
         return xs.at(n - 1);
-      },
+      }
     });
   },
   head() {
@@ -78,7 +78,7 @@ Object.assign(List.prototype, {
   toString() {
     return this.case({
       Nil: K('Nil'),
-      Cons: (head, tail) => `${head.toString()} : ${tail.toString()}`,
+      Cons: (head, tail) => `${head.toString()} : ${tail.toString()}`
     });
   },
   cons(v) {
@@ -91,7 +91,7 @@ Object.assign(List.prototype, {
     return this.case({
       Nil,
       Cons: (head, tail) =>
-        p(head) ? Cons(head, tail.filter(p)) : tail.filter(p),
+        p(head) ? Cons(head, tail.filter(p)) : tail.filter(p)
     });
   },
   chain(f) {
@@ -113,7 +113,7 @@ Object.assign(List.prototype, {
   toArray() {
     return this.case({
       Nil: K([]),
-      Cons: (head, tail) => [head, ...tail.toArray()],
+      Cons: (head, tail) => [head, ...tail.toArray()]
     });
   },
   traverse(of, f) {
@@ -132,7 +132,7 @@ Object.assign(List.prototype, {
       yield this[0];
       yield* this[1];
     }
-  },
+  }
 });
 
 function* reduce(fn, init, xs) {
@@ -211,7 +211,7 @@ const quicksort = Y(f => l => {
 
       //return [...smaller, x, ...bigger]
       return smaller.concat(Cons(x, Nil()).concat(bigger));
-    },
+    }
   });
   // if(l.length() === 0) {
   //   return Nil()

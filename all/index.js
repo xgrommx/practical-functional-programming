@@ -47,7 +47,7 @@ const { foldMap } = require('..');
 // Function
 // Tuple
 // Const
-const _Last = Type({ Last: [ K(true) ] });
+const _Last = Type({ Last: [K(true)] });
 
 const { Last } = _Last;
 
@@ -75,17 +75,17 @@ Object.assign(_Last.prototype, {
   },
   getLast() {
     return this.case({ Last: I });
-  },
+  }
 });
 
 console.log(
   Last(Just(10)).concat(Last(Just(20))),
   Last(Just(10)).concat(Last(Nothing())),
   Last(Nothing()).concat(Last(Just(20))),
-  Last(Nothing()).concat(Last(Nothing())),
+  Last(Nothing()).concat(Last(Nothing()))
 );
 
-const _First = Type({ First: [ K(true) ] });
+const _First = Type({ First: [K(true)] });
 
 const { First } = _First;
 
@@ -113,7 +113,7 @@ Object.assign(_First.prototype, {
   },
   getFirst() {
     return this.case({ First: I });
-  },
+  }
 });
 
 const findLast = p => xs => foldMap(Last.empty, x => {
@@ -121,8 +121,8 @@ const findLast = p => xs => foldMap(Last.empty, x => {
 })(xs).getLast();
 
 console.log(
-  findLast(x => x < 5)([ 1, 3, 4, 5, 6 ]),
-  foldMap(Array.empty, Array.of)(First(Just(10))),
+  findLast(x => x < 5)([1, 3, 4, 5, 6]),
+  foldMap(Array.empty, Array.of)(First(Just(10)))
 );
 
 const find = p => xs => foldMap(First.empty, x => {
@@ -130,11 +130,11 @@ const find = p => xs => foldMap(First.empty, x => {
 })(xs).getFirst();
 
 console.log(
-  find(x => x < 5)([ 1, 3, 4, 5, 6 ]),
-  foldMap(Array.empty, Array.of)(First(Just(10))),
+  find(x => x < 5)([1, 3, 4, 5, 6]),
+  foldMap(Array.empty, Array.of)(First(Just(10)))
 );
 
-const _Product = Type({ Product: [ Number ] });
+const _Product = Type({ Product: [Number] });
 
 const { Product } = _Product;
 
@@ -148,10 +148,10 @@ Object.assign(_Product.prototype, {
   },
   getProduct() {
     return this.case({ Product: I });
-  },
+  }
 });
 
-const _Any = Type({ Any: [ Boolean ] });
+const _Any = Type({ Any: [Boolean] });
 
 const { Any } = _Any;
 
@@ -164,13 +164,13 @@ Object.assign(_Any.prototype, {
   },
   getAny() {
     return this.case({ Any: I });
-  },
+  }
 });
 
 const or = xs => foldMap(Any.empty, Any)(xs).getAny();
 const any = p => xs => foldMap(Any.empty, B(Any)(p))(xs).getAny();
 
-const _All = Type({ All: [ Boolean ] });
+const _All = Type({ All: [Boolean] });
 
 const { All } = _All;
 
@@ -183,7 +183,7 @@ Object.assign(_All.prototype, {
   },
   getAll() {
     return this.case({ All: I });
-  },
+  }
 });
 
 const and = xs => foldMap(All.empty, All)(xs).getAll();
@@ -191,7 +191,7 @@ const all = p => xs => foldMap(All.empty, B(All)(p))(xs).getAll();
 
 const compare = (a, b) => a <= b;
 const isSorted = xs => B(and)(xs => zipWith(compare, xs, tail(xs)))(xs);
-const isSorted_ = xs => all(([ a, b ]) => compare(a, b))(zip(xs, tail(xs)));
+const isSorted_ = xs => all(([a, b]) => compare(a, b))(zip(xs, tail(xs)));
 
-console.log(isSorted([ 4, 5, 6, 7 ]), isSorted_([ 4, 5, 6, 7 ]));
+console.log(isSorted([4, 5, 6, 7]), isSorted_([4, 5, 6, 7]));
 // const isSorted = xs => all(Boolean, zipWith(compare)(xs)(tail(xs)))

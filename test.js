@@ -1,63 +1,87 @@
 require('./array');
 require('./functions');
 
-const {K, B, I} = require('./combinators');
-const {Maybe, Just, Nothing} = require('./maybe');
-const {Either, Left, Right} = require('./either');
-const {Compose} = require('./compose');
+const { K, B, I } = require('./combinators');
+const { Maybe, Just, Nothing } = require('./maybe');
+const { Either, Left, Right } = require('./either');
+const { Compose } = require('./compose');
 
-const {foldMap, replicateM, mapLeft, mapRight, traverse, liftA2} = require('.');
+const { foldMap, replicateM, mapLeft, mapRight, traverse, liftA2 } = require(
+  '.'
+);
 
 console.log(
-    // foldMap(Array, Array.of)(Compose([Just(10), Just(20), Nothing()])),
-    // replicateM(Array, 2)([1, 2, 3]),
-    mapRight([1,2,3])([4]),
-    mapLeft([1,2,3])([4])
+  // foldMap(Array, Array.of)(Compose([Just(10), Just(20), Nothing()])),
+  // replicateM(Array, 2)([1, 2, 3]),
+  mapRight([1, 2, 3])([4]),
+  mapLeft([1, 2, 3])([4])
 );
 
 const Type = require('union-type');
 
 const _Identity = Type({
-   Identity: [K(true)]
+  Identity: [K(true)]
 });
 
-const {Identity} = _Identity;
+const { Identity } = _Identity;
 
 Identity.of = Identity;
 
 Object.assign(_Identity.prototype, {
-    getIdentity() { return this.case({ Identity: I }) },
-    map(f) { return Identity(f(this.getIdentity())) },
-    ap(m) { return Identity(this.getIdentity()(m.getIdentity())) },
-  	foldMap(f) { return f(this.getIdentity()) },
-  	traverse(f) { return f(this.getIdentity()).map(x => Identity(x)) },
-    chain(f) { return f(this.runIdentity()) }
+  getIdentity() {
+    return this.case({ Identity: I });
+  },
+  map(f) {
+    return Identity(f(this.getIdentity()));
+  },
+  ap(m) {
+    return Identity(this.getIdentity()(m.getIdentity()));
+  },
+  foldMap(f) {
+    return f(this.getIdentity());
+  },
+  traverse(f) {
+    return f(this.getIdentity()).map(x => Identity(x));
+  },
+  chain(f) {
+    return f(this.runIdentity());
+  }
 });
 
 const _Const = Type({
-    Const: [K(true)]
+  Const: [K(true)]
 });
 
-const {Const} = _Const;
+const { Const } = _Const;
 
 Const.of = Const;
 
 Object.assign(_Const.prototype, {
-    getConst() { return this.case({ Const: (a, b) => a }) },
-    map() { return this },
-    ap(m) { return Const(this.getConst().concat(m.getConst())) }
+  getConst() {
+    return this.case({ Const: (a, b) => a });
+  },
+  map() {
+    return this;
+  },
+  ap(m) {
+    return Const(this.getConst().concat(m.getConst()));
+  }
 });
 
-const foldMapDefault = (T, f) => xs => traverse(K(Const.of(T.empty())), B(Const)(f))(xs).getConst();
+const foldMapDefault = (T, f) =>
+  xs => traverse(K(Const.of(T.empty())), B(Const)(f))(xs).getConst();
 
 console.log(
-    foldMapDefault(Array, Array.of)(Compose([Just(10), Just(20), Nothing()]))
+  foldMapDefault(Array, Array.of)(Compose([Just(10), Just(20), Nothing()]))
 );
 
-const fmapDefault = (T, f) => xs => traverse(K(Identity.of(T.empty())), B(Identity)(f))(xs).getIdentity();
+const fmapDefault = (T, f) =>
+  xs => traverse(K(Identity.of(T.empty())), B(Identity)(f))(xs).getIdentity();
 
 console.log(
-    B(foldMapDefault(Array, Array.of))(fmapDefault(Maybe, x => x * 10))(Compose([Just(10), Just(20), Nothing()]))
+  B(foldMapDefault(Array, Array.of))(fmapDefault(Maybe, x => x * 10))(
+    Compose([Just(10), Just(20), Nothing()])
+  )
 );
 
 // class Tuple {
@@ -84,10 +108,10 @@ console.log(
 // console.log(a, b);
 
 const _Tuple = Type({
-  Tuple: {_1: K(true), _2: K(true)}
-})
+  Tuple: { _1: K(true), _2: K(true) }
+});
 
-const {Tuple} = _Tuple;
+const { Tuple } = _Tuple;
 
 Tuple.of = (empty, x) => Tuple(empty(), x);
 Tuple.empty = (empty1, empty2) => Tuple(empty1(), empty2());
@@ -119,17 +143,17 @@ Object.assign(_Tuple.prototype, {
       Tuple(x, y) {
         return x;
       }
-    })
+    });
   },
   snd() {
     return this.case({
       Tuple(x, y) {
         return y;
       }
-    })
+    });
   },
   foldMap(empty, f) {
-    return f(this.snd())
+    return f(this.snd());
   },
   foldr(f, z) {
     return f(this.snd(), y);
@@ -138,9 +162,9 @@ Object.assign(_Tuple.prototype, {
     return f(this.snd()).map(_ => Tuple(this.fst(), _));
   },
   valueOf() {
-    return [this.fst(), this.snd()]
+    return [this.fst(), this.snd()];
   }
-})
+});
 
 // const [x, y] = Tuple("10", 20).chain(x => Tuple(" Hello", x * 20));
 const [x, y] = Tuple([10, 20], [30, 40]).traverse(Array.of, I);
@@ -176,20 +200,20 @@ console.log([x, y]);
 const isTuple = obj => {
   return obj.case({
     Tuple: K(true)
-  })
+  });
 };
 
 const _Writer = Type({
   Writer: [isTuple]
 });
 
-const {Writer} = _Writer;
+const { Writer } = _Writer;
 
 Writer.of = (x, empty) => Writer(Tuple(x, empty()));
 
 Object.assign(_Writer.prototype, {
   runWriter() {
-    return this.case({ Writer: I })
+    return this.case({ Writer: I });
   },
   execWriter() {
     return this.runWriter().snd();
@@ -209,21 +233,13 @@ Object.assign(_Writer.prototype, {
   }
 });
 
-console.log(
-  Writer(Tuple(10, 20)).runWriter()._1
-)
+console.log(Writer(Tuple(10, 20)).runWriter()._1);
 
-console.log(
-  [Just(10), Nothing()].chain(m => m.maybe([], Array.of))
-)
-
+console.log([Just(10), Nothing()].chain(m => m.maybe([], Array.of)));
 // console.log(Writer.of(10, () => "")
 //   .chain(x => Writer(Tuple(x + 20, `${x} + ${20} = ${x+20} => `)))
 //   .chain(x => Writer(Tuple(x + 30, `${x} + ${30} = ${x+30}`)))
 //   .execWriter())
-
 // const [x, y] = Tuple(10, 20).map(x => x * 10);
-
 // console.log([x, y])
-
 // foldMap(Array,)

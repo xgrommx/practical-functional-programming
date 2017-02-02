@@ -8,7 +8,7 @@ const { Sum } = require('./sum');
 var Tree = T({
   Empty: [],
   Leaf: [K(true)],
-  Node: [Tree, K(true), Tree],
+  Node: [Tree, K(true), Tree]
 });
 
 const { Empty, Leaf, Node } = Tree;
@@ -18,7 +18,7 @@ Object.assign(Tree.prototype, {
     return this.case({
       Empty: () => `Empty`,
       Leaf: v => `(Leaf ${v})`,
-      Node: (l, x, r) => `Node ${l.toString()} ${x.toString()} ${r.toString()}`,
+      Node: (l, x, r) => `Node ${l.toString()} ${x.toString()} ${r.toString()}`
     });
   },
   // Functor
@@ -26,7 +26,7 @@ Object.assign(Tree.prototype, {
     return this.case({
       Empty,
       Leaf: v => Leaf(f(v)),
-      Node: (l, x, r) => Node(l.map(f), f(x), r.map(f)),
+      Node: (l, x, r) => Node(l.map(f), f(x), r.map(f))
     });
   },
   // Foldable
@@ -34,7 +34,7 @@ Object.assign(Tree.prototype, {
     return this.case({
       Empty: K(z),
       Leaf: a => f(z)(a),
-      Node: (l, x, r) => r.foldl(f, f(l.foldl(f, z))(x)),
+      Node: (l, x, r) => r.foldl(f, f(l.foldl(f, z))(x))
     });
   },
   // Foldable
@@ -42,7 +42,7 @@ Object.assign(Tree.prototype, {
     return this.case({
       Empty: K(z),
       Leaf: a => f(a)(z),
-      Node: (l, x, r) => l.foldr(f, f(x)(r.foldr(f, z))),
+      Node: (l, x, r) => l.foldr(f, f(x)(r.foldr(f, z)))
     });
   },
   // Foldable
@@ -51,7 +51,7 @@ Object.assign(Tree.prototype, {
       Empty: empty,
       Leaf: a => f(a),
       Node: (l, x, r) =>
-        l.foldMap(empty, f).concat(f(x)).concat(r.foldMap(empty, f)),
+        l.foldMap(empty, f).concat(f(x)).concat(r.foldMap(empty, f))
     });
   },
   // Traversable
@@ -64,9 +64,9 @@ Object.assign(Tree.prototype, {
           .traverse(of, f)
           .map(l => x => r => Node(l, x, r))
           .ap(f(x))
-          .ap(r.traverse(of, f)),
+          .ap(r.traverse(of, f))
     });
-  },
+  }
 });
 
 const cons = x => xs => [x, ...xs];
@@ -77,7 +77,7 @@ Observable.prototype.ap = function(o) {
 };
 
 const _ZipObservable = T({
-  ZipObservable: [K(true)],
+  ZipObservable: [K(true)]
 });
 
 const { ZipObservable } = _ZipObservable;
@@ -94,18 +94,18 @@ Object.assign(_ZipObservable.prototype, {
     return ZipObservable(
       Observable.zip(this.getZipObservable(), other.getZipObservable(), (
         f,
-        v,
+        v
       ) =>
-        f(v)),
+        f(v))
     );
   },
   getZipObservable() {
     return this.case({
       ZipObservable(xs) {
         return xs;
-      },
+      }
     });
-  },
+  }
 });
 
 // const zipWith3 = f => xs => ys => zs => ZipObservable.of(f).ap(ZipObservable(xs)).ap(ZipObservable(ys)).ap(ZipObservable(zs)).getZipObservable();
@@ -119,7 +119,7 @@ require('./array');
 const { ZipList } = require('./zip-list.js');
 
 var _Max = T({
-  Max: [Number],
+  Max: [Number]
 });
 
 const { Max } = _Max;
@@ -129,18 +129,18 @@ Max.empty = () => Max(-Infinity);
 Object.assign(_Max.prototype, {
   getMax() {
     return this.case({
-      Max: I,
+      Max: I
     });
   },
   concat(m) {
     return Max(Math.max(this.getMax(), m.getMax()));
-  },
+  }
 });
 
 // data Stream = Stream { runStream :: Function }
 
 const _Stream = T({
-  Stream: { runStream: Function },
+  Stream: { runStream: Function }
 });
 
 const { Stream } = _Stream;
