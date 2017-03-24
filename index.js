@@ -4,7 +4,7 @@ const { B, K, C, I } = require('./combinators');
 const of = T => value => T.of(value);
 // map, fmap, <$>, liftM, liftA
 const map = f => source => {
-  if (source.map) return source.map(f);
+  if (source.map) return source.map(v => f(v));
   if (source.ap) return ap(source.constructor.of(f))(source);
   if (source.chain) return chain_(B(source.constructor.of)(f))(source);
 };
