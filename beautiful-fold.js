@@ -12,29 +12,35 @@ const Fold = (step, begin, done) => ({
   step, // step :: (x, a) -> x
   begin, // begin :: x
   done, // done :: x -> b
-  map(f) {
+  map(f) { // Functor
     return Fold(step, begin, B(f)(done))
   },
-  lmap(f) {
+  lmap(f) { // Profunctor
     return Fold((x, a) => step(x, f(a)), begin, done)
   },
-  rmap(f) {
+  rmap(f) { // Profunctor
     return this.map(f)
   },
-  concat(m) {
+  concat(m) { // Monoid
     return liftA2(concat)(this)(m)
   },
-  ap({ step:stepR, begin:beginR, done:doneR }) {
+  ap({ step:stepR, begin:beginR, done:doneR }) { // Applicative
     const newStep = ([x, y], a) => [step(x, a), stepR(y, a)]
     const newBegin = [begin, beginR]
     const newDone = ([x, y]) => done(x)(doneR(y))
 
     return Fold(newStep, newBegin, newDone)
   },
-  fold(as) {
+  extract() { // Comonad
+    return done(begin)
+  },
+  duplicate() { // Comonad
+    return Fold(step, begin, x => Fold(step, x, done))
+  },
+  fold(as) { // Foldable
     return foldr((a, k) => x => k(step(x, a)))(done)(as)(begin)
   },
-  scan(as) {
+  scan(as) { // Foldable
     return foldr((a, k) => x => [].concat(done(x), k(step(x, a))))(x => [done(x)])(as)(begin)
   }
 })
@@ -43,8 +49,8 @@ const Fold1_= step => Fold((a, b) => Just(a.maybe(b, x => step(x, b))), Nothing(
 
 Fold.fold = (f, xs) => f.fold(xs)
 Fold.scan = (f, xs) => f.scan(xs)
-Fold.empty = T => Fold.of(T.empty())
-Fold.of = x => Fold(K(null), null, K(x))
+Fold.empty = T => Fold.of(T.empty()) // Monoid
+Fold.of = x => Fold(K(null), null, K(x)) // Pointed Functor
 Fold.sum = Fold((x, y) => x + y, 0, I)
 Fold.product = Fold((x, y) => x * y, 1, I)
 Fold.genericLength = Fold((n, _) => n + 1, 0, I)
@@ -58,6 +64,7 @@ const range = n => Array.from({length: n}, (_, i) => i + 1)
 const average = liftA2(x => y => x / y)(Fold.sum)(Fold.genericLength)
 
 console.log(
+  average.duplicate().fold(range(10000)).extract(),
   average.fold(range(15000)),
   Fold.sum.scan(range(10)),
   Fold.genericLength.fold([1,2,3,4]),
