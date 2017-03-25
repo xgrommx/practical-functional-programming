@@ -4,6 +4,7 @@ const { liftA2, foldr, concat, sequence, map } = require('.')
 const { K, B, I } = require('./combinators')
 const { Just, Nothing } = require('./maybe')
 const { Sum } = require('./sum')
+const { Last, First } = require('./all')
 
 // Basic idea from https://www.stackage.org/haddock/lts-8.5/foldl-1.2.3/Control-Foldl.html
 
@@ -80,5 +81,10 @@ console.log(
     (Fold((x, y) => concat(Sum(1))(Sum(y)), Sum.empty(), x => x.getSum())).fold(range(10000)),
   liftA2(x => y => x / y)
     (Fold.foldMap(Sum, Sum, x => x.getSum()))
-    (Fold.foldMap(Sum, K(Sum(1)), x => x.getSum())).fold([1,2,3,4,5])
+    (Fold.foldMap(Sum, K(Sum(1)), x => x.getSum())).fold([1,2,3,4,5]),
+  liftA2(x => y => [x, y])
+    (Fold.foldMap(First, B(First)(Just), x => x.getFirst()))
+    (Fold.foldMap(Last, B(Last)(Just), x => x.getLast()))
+      .fold([])
+      .map(x => x.getOrElse(void 0))
 )

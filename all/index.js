@@ -78,12 +78,12 @@ Object.assign(_Last.prototype, {
   }
 });
 
-console.log(
-  Last(Just(10)).concat(Last(Just(20))),
-  Last(Just(10)).concat(Last(Nothing())),
-  Last(Nothing()).concat(Last(Just(20))),
-  Last(Nothing()).concat(Last(Nothing()))
-);
+// console.log(
+//   Last(Just(10)).concat(Last(Just(20))),
+//   Last(Just(10)).concat(Last(Nothing())),
+//   Last(Nothing()).concat(Last(Just(20))),
+//   Last(Nothing()).concat(Last(Nothing()))
+// );
 
 const _First = Type({ First: [K(true)] });
 
@@ -120,19 +120,19 @@ const findLast = p => xs => foldMap(Last.empty, x => {
   return Last(p(x) ? Just(x) : Nothing());
 })(xs).getLast();
 
-console.log(
-  findLast(x => x < 5)([1, 3, 4, 5, 6]),
-  foldMap(Array.empty, Array.of)(First(Just(10)))
-);
+// console.log(
+//   findLast(x => x < 5)([1, 3, 4, 5, 6]),
+//   foldMap(Array.empty, Array.of)(First(Just(10)))
+// );
 
 const find = p => xs => foldMap(First.empty, x => {
   return First(p(x) ? Just(x) : Nothing());
 })(xs).getFirst();
 
-console.log(
-  find(x => x < 5)([1, 3, 4, 5, 6]),
-  foldMap(Array.empty, Array.of)(First(Just(10)))
-);
+// console.log(
+//   find(x => x < 5)([1, 3, 4, 5, 6]),
+//   foldMap(Array.empty, Array.of)(First(Just(10)))
+// );
 
 const _Product = Type({ Product: [Number] });
 
@@ -193,5 +193,10 @@ const compare = (a, b) => a <= b;
 const isSorted = xs => B(and)(xs => zipWith(compare, xs, tail(xs)))(xs);
 const isSorted_ = xs => all(([a, b]) => compare(a, b))(zip(xs, tail(xs)));
 
-console.log(isSorted([4, 5, 6, 7]), isSorted_([4, 5, 6, 7]));
+// console.log(isSorted([4, 5, 6, 7]), isSorted_([4, 5, 6, 7]));
 // const isSorted = xs => all(Boolean, zipWith(compare)(xs)(tail(xs)))
+
+module.exports = {
+  Last,
+  First
+}
